@@ -1,0 +1,12 @@
+node_modules/
+docs/
+demo/
+tests/
+src/
+scripts/
+.github/
+coverage/
+*.zip
+*.tgz
+pnpm-lock.yaml
+pnpm-workspace.yaml

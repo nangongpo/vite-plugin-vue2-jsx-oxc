@@ -1,0 +1,21 @@
+packages:
+  - demo
+  - docs
+
+allowBuilds:
+  esbuild: true
+
+# pnpm 11 defaults minimumReleaseAge to 1440 minutes and re-checks
+# committed lockfile entries during CI. These exact versions are reviewed and
+# intentionally pinned by pnpm-lock.yaml, so only this release is exempted.
+minimumReleaseAgeExclude:
+  - vue@3.5.39
+  - '@vue/compiler-core@3.5.39'
+  - '@vue/compiler-dom@3.5.39'
+  - '@vue/compiler-sfc@3.5.39'
+  - '@vue/compiler-ssr@3.5.39'
+  - '@vue/reactivity@3.5.39'
+  - '@vue/runtime-core@3.5.39'
+  - '@vue/runtime-dom@3.5.39'
+  - '@vue/server-renderer@3.5.39'
+  - '@vue/shared@3.5.39'

@@ -1,0 +1,20 @@
+{
+  "name": "vite-plugin-vue2-jsx-oxc-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.ts",
+    "build": "vite build --config vite.config.ts",
+    "build:ssr": "vite build --config vite.config.ts --ssr src/entry-server.ts --outDir dist-ssr",
+    "preview": "vite preview --config vite.config.ts"
+  },
+  "dependencies": {
+    "vue": "^2.7.16"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.3.4",
+    "typescript": "^5.9.0",
+    "vite": "^8.0.0",
+    "vite-plugin-vue2-jsx-oxc": "workspace:*"
+  }
+}

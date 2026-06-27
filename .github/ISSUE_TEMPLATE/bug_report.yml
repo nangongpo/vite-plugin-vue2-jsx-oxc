@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a reproducible transformation or runtime problem
+title: '[Bug] '
+labels: [bug]
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Include Node, Vite, Vue, and plugin versions.
+      placeholder: Node 22, Vite 8.x, Vue 2.7.16, plugin 0.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Provide a repository or a minimal JSX/TSX input and generated output.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true

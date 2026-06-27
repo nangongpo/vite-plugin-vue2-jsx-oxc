@@ -1,0 +1,120 @@
+name: Deploy docs and demo
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'demo/**'
+      - 'src/**'
+      - 'scripts/build-pages.mjs'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/pages.yml'
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Show tool versions
+        run: |
+          node --version
+          pnpm --version
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Resolve Pages variables
+        shell: bash
+        run: |
+          REPOSITORY_NAME="${GITHUB_REPOSITORY#*/}"
+
+          echo "REPOSITORY_NAME=$REPOSITORY_NAME" >> "$GITHUB_ENV"
+          echo "DOCS_BASE=/$REPOSITORY_NAME/" >> "$GITHUB_ENV"
+          echo "DEMO_BUILD_BASE=./" >> "$GITHUB_ENV"
+          echo "DEMO_URL=https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPOSITORY_NAME/playground/" >> "$GITHUB_ENV"
+
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Docs base: /$REPOSITORY_NAME/"
+          echo "Demo URL: https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPOSITORY_NAME/playground/"
+
+      - name: Test
+        run: pnpm typecheck && pnpm test
+
+      - name: Build documentation and demo
+        run: pnpm pages:build
+
+      - name: Verify Pages output
+        shell: bash
+        run: |
+          DOCS_DIST="docs/.vitepress/dist"
+          PLAYGROUND_DIST="$DOCS_DIST/playground"
+          PLAYGROUND_HTML="$PLAYGROUND_DIST/index.html"
+
+          test -f "$DOCS_DIST/index.html"
+          test -f "$PLAYGROUND_HTML"
+          test -d "$PLAYGROUND_DIST/assets"
+          test -n "$(find "$PLAYGROUND_DIST/assets" -type f -print -quit)"
+
+          grep -Eq '(src|href)="\./assets/' "$PLAYGROUND_HTML"
+
+          if grep -Eq '(src|href)="/[^"]*assets/' "$PLAYGROUND_HTML"; then
+            echo "Error: playground contains absolute asset URLs"
+            grep -E '(src|href)="/[^"]*assets/' "$PLAYGROUND_HTML"
+            exit 1
+          fi
+
+          echo "Pages output verified successfully"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

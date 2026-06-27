@@ -1,0 +1,26 @@
+:root {
+  --vp-c-brand-1: #21845f;
+  --vp-c-brand-2: #176b4c;
+  --vp-c-brand-3: #12533d;
+  --vp-c-brand-soft: rgba(33, 132, 95, 0.14);
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #176b4c 20%, #42b883 80%);
+  --vp-home-hero-image-background-image: radial-gradient(circle, rgba(66, 184, 131, .32), transparent 65%);
+  --vp-home-hero-image-filter: blur(40px);
+}
+
+.VPHero .image-src { width: 220px; height: 220px; }
+.vp-doc table { display: table; width: 100%; }
+.vp-doc .feature-complete { color: #21845f; font-weight: 700; }
+.vp-doc .compat-warning { color: #b97800; font-weight: 700; }
+.demo-link-card {
+  display: block;
+  margin: 20px 0;
+  padding: 20px;
+  color: inherit !important;
+  text-decoration: none !important;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+  background: var(--vp-c-bg-soft);
+}
+.demo-link-card:hover { border-color: var(--vp-c-brand-1); }

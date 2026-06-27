@@ -1,0 +1,98 @@
+{
+  "name": "vite-plugin-vue2-jsx-oxc",
+  "version": "0.0.1",
+  "description": "Vue 2.7 JSX/TSX transform for Vite 8 using Oxc Parser, with Babel-compatible Composition API, directives, explicit VNodeData spread merging, HMR and SSR",
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist demo/dist demo/dist-ssr docs/.vitepress/dist docs/.vitepress/cache",
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "demo:dev": "pnpm build && pnpm --dir demo dev",
+    "demo:build": "pnpm build && pnpm demo:build:only",
+    "demo:ssr-build": "pnpm build && pnpm demo:ssr-build:only",
+    "demo:ssr-smoke": "node scripts/ssr-smoke.mjs",
+    "demo:scan-smoke": "node scripts/dev-scan-smoke.mjs",
+    "docs:dev": "pnpm --dir docs dev",
+    "docs:build": "pnpm --dir docs build",
+    "docs:preview": "pnpm --dir docs preview",
+    "verify": "pnpm typecheck && pnpm test && pnpm build && pnpm demo:typecheck && pnpm demo:scan-smoke && pnpm demo:build:only && pnpm demo:ssr-build:only && pnpm demo:ssr-smoke && pnpm docs:build",
+    "release:check": "node scripts/check-release.mjs",
+    "pack:check": "pnpm pack --dry-run --json",
+    "pages:build": "node scripts/build-pages.mjs",
+    "bootstrap": "pnpm install",
+    "prepublishOnly": "pnpm verify && pnpm release:check",
+    "demo:typecheck": "pnpm --dir demo exec tsc -p tsconfig.json",
+    "demo:build:only": "pnpm --dir demo build",
+    "demo:ssr-build:only": "pnpm --dir demo build:ssr"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "peerDependencies": {
+    "vite": "^8.0.0",
+    "vue": "^2.7.0"
+  },
+  "dependencies": {
+    "magic-string": "^0.30.21",
+    "oxc-parser": "^0.137.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@types/babel__core": "^7.20.5",
+    "@types/node": "^24.0.0",
+    "@vitejs/plugin-vue2": "^2.3.4",
+    "@vue/babel-preset-jsx": "^1.4.0",
+    "jsdom": "^24.1.3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.0",
+    "vite": "^8.0.0",
+    "vitest": "^4.0.0",
+    "vue": "^2.7.16",
+    "vue-server-renderer": "^2.7.16"
+  },
+  "sideEffects": false,
+  "keywords": [
+    "vite",
+    "vite8",
+    "vue2",
+    "vue2.7",
+    "jsx",
+    "tsx",
+    "oxc",
+    "rolldown"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "author": "po nangong",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nangongpo/vite-plugin-vue2-jsx-oxc.git"
+  },
+  "homepage": "https://nangongpo.github.io/vite-plugin-vue2-jsx-oxc/",
+  "bugs": {
+    "url": "https://github.com/nangongpo/vite-plugin-vue2-jsx-oxc/issues"
+  },
+  "packageManager": "pnpm@11.9.0"
+}
